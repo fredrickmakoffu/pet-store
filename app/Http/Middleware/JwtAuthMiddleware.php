@@ -18,7 +18,7 @@ class JwtAuthMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, string $roles)
+    public function handle(Request $request, Closure $next, string $roles = null)
     {
         // check if token is provided
         $token = $request->bearerToken();
@@ -33,7 +33,7 @@ class JwtAuthMiddleware
         }
 
         // check if role is valid
-        if( !$this->hasRole(User::find($token_details->user_id), $roles)) {
+        if( $roles && !$this->hasRole(User::find($token_details->user_id), $roles)) {
             abort(401, 'You do not have the rights to access this API');
         }
 

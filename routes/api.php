@@ -20,12 +20,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
     Route::post('register', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
     
-    Route::group(['prefix' => 'admin'], function () {
-        // User
-        Route::group(['middleware' => 'jwt:admin'], function ()   {
-            Route::get('users', function() {
-                return \App\Models\User::all();
-            });
+    Route::group(['middleware' => 'jwt', 'prefix' => 'admin'], function () {
+        // Admin
+        Route::get('users', function() {
+            return \App\Models\User::all();
         });
     });
 });

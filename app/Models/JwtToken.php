@@ -28,4 +28,9 @@ class JwtToken extends Model
             'expiration_date' => Carbon::parse($expiration_date)->format('Y-m-d H:i:s')
         ]);
     }
+
+    public function getUuidFromToken(string $token) : string | null {
+        $token = $this->where('token', $token)->first();
+        return $token->uuid ?? null;
+    }
 }

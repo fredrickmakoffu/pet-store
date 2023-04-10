@@ -40,7 +40,7 @@ class ManageJwtTokens
     {
         // configs (data from .env)
         $this->algo         = config('jwt.algo');
-        $this->secret       = configuse Illuminate\Support\Facades\Log;('jwt.secret');
+        $this->secret       = config('jwt.secret');
         $this->timezone     = config('jwt.timezone');
         $this->expiration_date = config('jwt.expiration_date');
 
@@ -67,12 +67,12 @@ class ManageJwtTokens
         return $token;
     }
 
-    public function validateToken(string $token) {
+    public function validateToken(string $token, string $uuid) {
         $signingKey   = InMemory::plainText($this->secret);
     
         $token = (new Parser(new JoseEncoder()))->parse($token);
         $constraints = [
-            new IdentifiedBy($request->uuid),
+            new IdentifiedBy($uuid),
             new SignedWith($this->algorithm, $signingKey)
         ];
         
@@ -86,7 +86,10 @@ class ManageJwtTokens
             ];
         }
         
-        return "true";
+        return [
+            'status' => true,
+            'message' => 'Token is valid'
+        ];
     }
 
     protected function generateUserToken(User $user, string $uuid) : object 
@@ -109,4 +112,9 @@ class ManageJwtTokens
             // Builds a new token
             ->getToken($this->algorithm, $signingKey);
     }
+
+    public function getUuidFromToken($token) : string | null {
+        return $this->jwt_token->getUuidFromToken($token);
+    }
 } 
+

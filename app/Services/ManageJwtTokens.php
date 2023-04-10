@@ -80,16 +80,10 @@ class ManageJwtTokens
             (new Validator())->assert($token, ...$constraints); 
         } catch (RequiredConstraintsViolated $e) {
             // list of constraints violation exceptions:
-            return [
-                'status' => false,
-                'message' => $e->violations()
-            ];
+            return false;
         }
         
-        return [
-            'status' => true,
-            'message' => 'Token is valid'
-        ];
+        return true;
     }
 
     protected function generateUserToken(User $user, string $uuid) : object 

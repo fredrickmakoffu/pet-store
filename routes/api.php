@@ -19,12 +19,37 @@ Route::group(['prefix' => 'v1'], function () {
     // Auth Routes
     Route::post('login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
     Route::post('register', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
+
+    // Validate User
+    Route::get('/email/verify/{id}/{hash}', [\App\Http\Controllers\User\UsersController::class, 'verify'])->name('verification.verify');
     
-    Route::group(['middleware' => 'jwt', 'prefix' => 'admin'], function () {
+    Route::group(['middleware' => 'jwt:admin', 'prefix' => 'admin'], function () {
         // Admin
-        Route::get('users', function() {
-            return \App\Models\User::all();
-        });
+        Route::post('create', [\App\Http\Controllers\User\UsersController::class, 'store']);
+        Route::get('user-listing', [\App\Http\Controllers\User\UsersController::class, 'index']);
+        Route::put('user-edit/{id}', [\App\Http\Controllers\User\UsersController::class, 'update']);
+        Route::get('user-delete/{id}', [\App\Http\Controllers\User\UsersController::class, 'destroy']);
     });
+
+    Route::group(['middleware' => 'jwt'], function () {
+        // Admin
+        Route::get('logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout']);
+    });
+});
+
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+
+Route::get('email/{id}', function(User $user) {
+    try {
+        event(new Registered($user));
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false,
+            'message' => $e->getMessage()
+        ], 500);
+    }
+
+    return 'here';
 });
 

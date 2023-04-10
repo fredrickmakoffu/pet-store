@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +29,9 @@ class StoreRequest extends FormRequest
             'phone_number' => 'required|string|max:30|unique:users',
             'email' => 'required|email|unique:users',
             'is_marketing' => 'sometimes|boolean',
-            'is_admin' => 'sometimes|boolean'
+            'is_admin' => 'sometimes|boolean',
+            'password' => 'required|min:8|max:30',
+            'password_confirmation' => 'required|same:password'
         ];
     }
 }

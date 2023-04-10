@@ -4,14 +4,16 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\JwtToken;
+use Illuminate\Http\Request;
 use App\Services\ManageJwtTokens;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\Auth\StoreRequest;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\CollectionResource;
 
 class LoginController extends Controller
 {
-    public function login(StoreRequest $request) : CollectionResource {
+    public function login(LoginRequest $request) : CollectionResource {
         $data = $request->validated();
 
         // check if user exists
@@ -30,4 +32,12 @@ class LoginController extends Controller
             'expiration_date' => $token->claims()->all()['exp']
         ]);
     }
+
+    public function logout(Request $request) : CollectionResource {
+        // delete token from database
+        JwtToken::where('token', $request->bearerToken())->delete();
+        
+        return new CollectionResource([]);
+    }
+
 }

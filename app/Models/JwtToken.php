@@ -33,4 +33,8 @@ class JwtToken extends Model
         $token = $this->where('token', $token)->first();
         return $token ?? null;
     }
+
+    public function destroyToken(string $token) : void {
+        $this->where('token', $token)->delete();
+    }
 }

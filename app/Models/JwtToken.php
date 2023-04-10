@@ -29,8 +29,8 @@ class JwtToken extends Model
         ]);
     }
 
-    public function getUuidFromToken(string $token) : string | null {
+    public function getDetailsFromToken(string $token) : JwtToken | null {
         $token = $this->where('token', $token)->first();
-        return $token->uuid ?? null;
+        return $token ?? null;
     }
 }

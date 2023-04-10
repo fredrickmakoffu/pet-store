@@ -7,28 +7,27 @@ use App\Models\User;
 use App\Services\ManageJwtTokens;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Auth\StoreRequest;
+use App\Http\Resources\CollectionResource;
 
 class LoginController extends Controller
 {
-    public function login(StoreRequest $request) {
+    public function login(StoreRequest $request) : CollectionResource {
         $data = $request->validated();
+
         // check if user exists
         $user = User::where('email', $data['email'])->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response([
-                'message' => ['These credentials do not match our records.']
-            ], 404);
+            abort(401, 'Invalid credentials');
         }
 
         // create token
-        $jwt_token = new ManageJwtTokens();
-        $token = $jwt_token->createToken($user);
+        $token = (new ManageJwtTokens())->createToken($user);
 
-        return response([
+        return new CollectionResource([
             'message' => 'Logged in successfully',
             'token' => $token->toString(),
             'expiration_date' => $token->claims()->all()['exp']
-        ], 200);
+        ]);
     }
 }

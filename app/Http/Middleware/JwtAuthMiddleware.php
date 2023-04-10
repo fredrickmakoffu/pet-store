@@ -5,8 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use App\Services\ManageJwtTokens;
-use App\Services\GenerateJwtViolationErrorMessage;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Models\User;
 
 class JwtAuthMiddleware
 {
@@ -27,9 +26,9 @@ class JwtAuthMiddleware
         }
 
         // check if token saved
-        $uuid = (new ManageJwtTokens())->getUuidFromToken($token);
+        $token_details = (new ManageJwtTokens())->getDetailsFromToken($token);
 
-        if( !$uuid || !(new ManageJwtTokens())->validateToken($token, $uuid)) {
+        if( !$token_details->uuid || !(new ManageJwtTokens())->validateToken(User::find($token_details->user_id), $token, $token_details->uuid)) {
             abort(401, 'Invalid or expired token');
         }
 

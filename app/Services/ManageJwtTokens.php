@@ -16,6 +16,7 @@ use Lcobucci\JWT\Validation\Constraint\IdentifiedBy;
 use Lcobucci\JWT\Validation\Validator;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
+use Lcobucci\JWT\Validation\Constraint\HasClaimWithValue;
 
 // uuid
 use Ramsey\Uuid\Uuid;
@@ -35,6 +36,7 @@ class ManageJwtTokens
     private Signer $algorithm;
     private $current_timezone;
     private JwtToken $jwt_token;
+    private string $app_url;
 
     public function __construct()
     {
@@ -43,6 +45,7 @@ class ManageJwtTokens
         $this->secret       = config('jwt.secret');
         $this->timezone     = config('jwt.timezone');
         $this->expiration_date = config('jwt.expiration_date');
+        $this->app_url = config('app.url');
 
         // lcobucci setup
         $this->tokenBuilder = (new Builder(new JoseEncoder(), ChainedFormatter::default()));
@@ -67,13 +70,15 @@ class ManageJwtTokens
         return $token;
     }
 
-    public function validateToken(string $token, string $uuid) {
+    public function validateToken(User $user, string $token, string $uuid) {
         $signingKey   = InMemory::plainText($this->secret);
     
         $token = (new Parser(new JoseEncoder()))->parse($token);
         $constraints = [
             new IdentifiedBy($uuid),
-            new SignedWith($this->algorithm, $signingKey)
+            new SignedWith($this->algorithm, $signingKey),
+            new HasClaimWithValue('uid', $user->id),
+            new HasClaimWithValue('is_admin', $user->is_admin)
         ];
         
         try {
@@ -91,6 +96,8 @@ class ManageJwtTokens
         $signingKey = InMemory::plainText($this->secret);  
         
         return $this->tokenBuilder
+            // Configures the issuer (iss claim)
+            ->issuedBy($this->app_url)
             // Configures the id (jti claim)
             ->identifiedBy($uuid)
             // Configures the time that the token was issue (iat claim)
@@ -103,12 +110,14 @@ class ManageJwtTokens
             ->withClaim('timezone', $this->timezone)
             // Configures a new claim, called "uid"
             ->withClaim('uid', $user->id)
+            // Configures a new claim, called "role"
+            ->withClaim('is_admin', $user->is_admin)
             // Builds a new token
             ->getToken($this->algorithm, $signingKey);
     }
 
-    public function getUuidFromToken($token) : string | null {
-        return $this->jwt_token->getUuidFromToken($token);
+    public function getDetailsFromToken($token) : JwtToken | null {
+        return $this->jwt_token->getDetailsFromToken($token);
     }
 } 
 

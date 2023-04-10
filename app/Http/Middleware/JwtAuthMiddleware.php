@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Services\ManageJwtTokens;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 
 class JwtAuthMiddleware
 {
@@ -16,22 +18,33 @@ class JwtAuthMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, string $roles)
     {
-        $token = $request->bearerToken();
-        
         // check if token is provided
+        $token = $request->bearerToken();
         if ( !$token) {
             abort(401, 'Invalid or expired token');
         }
 
         // check if token saved
         $token_details = (new ManageJwtTokens())->getDetailsFromToken($token);
-
-        if( !$token_details->uuid || !(new ManageJwtTokens())->validateToken(User::find($token_details->user_id), $token, $token_details->uuid)) {
+        if( !$token_details || !(new ManageJwtTokens())->validateToken(User::find($token_details->user_id), $token, $token_details->uuid)) {
             abort(401, 'Invalid or expired token');
         }
 
+        // check if role is valid
+        if( !$this->hasRole(User::find($token_details->user_id), $roles)) {
+            abort(401, 'You do not have the rights to access this API');
+        }
+
         return $next($request);
+    }
+
+
+    public function hasRole(User $user, string $role) : bool
+    {
+        return $role == 'admin' && $user->is_admin
+            ? true
+            : false;
     }
 }

@@ -22,7 +22,7 @@ Route::group(['prefix' => 'v1'], function () {
     
     Route::group(['prefix' => 'admin'], function () {
         // User
-        Route::group(['middleware' => 'jwt'], function ()   {
+        Route::group(['middleware' => 'jwt:admin'], function ()   {
             Route::get('users', function() {
                 return \App\Models\User::all();
             });

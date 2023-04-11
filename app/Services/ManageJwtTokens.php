@@ -24,6 +24,7 @@ use Ramsey\Uuid\Uuid;
 // models
 use App\Models\User;
 use App\Models\JwtToken;
+use Illuminate\Support\Facades\Log;
 
 class ManageJwtTokens
 {
@@ -74,6 +75,11 @@ class ManageJwtTokens
         $signingKey   = InMemory::plainText($this->secret);
     
         $token = (new Parser(new JoseEncoder()))->parse($token);
+        
+        if($this->expiredToken($token)) {
+            return false;
+        }
+
         $constraints = [
             new IdentifiedBy($uuid),
             new SignedWith($this->algorithm, $signingKey),
@@ -118,6 +124,16 @@ class ManageJwtTokens
 
     public function getDetailsFromToken($token) : JwtToken | null {
         return $this->jwt_token->getDetailsFromToken($token);
+    }
+
+    public function expiredToken($token) : bool 
+    {
+        $exp = $token->claims()->all()['exp'];
+        $timezone = $token->claims()->all()['timezone'];
+        $expiry_time = $exp->setTimezone(new DateTimeZone($timezone))->format('Y-m-d H:i:s');
+        $now = now()->setTimezone(new DateTimeZone($timezone))->format('Y-m-d H:i:s');
+
+        return $expiry_time < $now;
     }
 } 
 

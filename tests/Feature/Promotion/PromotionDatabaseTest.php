@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Promotion;
 
 use App\Models\Promotion;
 use Illuminate\Foundation\Testing\RefreshDatabase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Promotion;
+namespace App\Http\Requests\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,7 +25,7 @@ class IndexRequest extends FormRequest
     {
         return [
             'title' => 'string',
-            'content' => 'string'
+            'slug' => 'string',
         ];
     }
 }

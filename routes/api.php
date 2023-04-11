@@ -44,6 +44,13 @@ Route::group(['prefix' => 'v1'], function () {
         Route::put('brands/edit/{brand:uuid}', [\App\Http\Controllers\BrandController::class, 'update']);
         Route::delete('brands/delete/{brand:uuid}', [\App\Http\Controllers\BrandController::class, 'destroy']);
 
+        // Post APIs
+        Route::get('posts', [\App\Http\Controllers\PostsController::class, 'index']);
+        Route::post('posts', [\App\Http\Controllers\PostsController::class, 'store']);
+        Route::get('posts/{post:uuid}', [\App\Http\Controllers\PostsController::class, 'show']);
+        Route::put('posts/edit/{post:uuid}', [\App\Http\Controllers\PostsController::class, 'update']);
+        Route::delete('posts/delete/{post:uuid}', [\App\Http\Controllers\PostsController::class, 'destroy']);
+
 
     });
 

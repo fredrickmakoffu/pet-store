@@ -24,7 +24,7 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'sometimes|string|exists:brands,title',
+            'title' => 'sometimes|string',
             'slug' => 'sometimes|string',
         ];
     }

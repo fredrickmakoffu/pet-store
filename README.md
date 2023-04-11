@@ -15,21 +15,23 @@ Clone your project to the server using the following command:
 
 Only two modifications are required for the .env file, apart from its regular requirements: 
 
-Set up your RapidAPI credentials here, for example: 
+1. The application uses the lcobucci/jwt package, and there are some variables you need to add to your env so things work, for example: 
 
-`RAPIDAPI_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
-`RAPIDAPI_HOST=<your-host-file-here>`
+`JWT_ALGORITHM=HS256`
+`JWT_SECRET="hiG8DlOKvtih6AxlZn5XKImZ06yu8I3mkOzaJrEuW8yAv8Jnkw330uMt8AEqQ5LB"`
+`JWT_EXPIRATION="+60 minutes"`
+`JWT_TIMEZONE="Africa/Nairobi"`
 
-You should also put down your mailer credentials so that the project can send emails
+2. You should also put down your mailer credentials so that the project can send emails
 
-## Step 2: Build the Docker Images
+## Step 3: Build the Docker Images
 -------------------------------
 
 Navigate to the project directory and build the Docker images using the following command:
 
 `docker-compose build`
 
-## Step 3: Start the Docker Containers
+## Step 4: Start the Docker Containers
 -----------------------------------
 
 Start the Docker containers using the following command:
@@ -38,32 +40,19 @@ Start the Docker containers using the following command:
 
 The `-d` flag runs the containers in detached mode.
 
-## Step 4: Set Up Laravel
+## Step 5: Install Composer Dependencies
 ----------------------
 
-Enter the Laravel container using the following command:
-com
+So that all third party libraries can work in your environment, you can can install them in your docker environment with this command:
 
-`docker exec -it <container-name> /bin/bash`
-
-Replace `<container-name>` with the name of your Laravel container.
-
-Navigate to the project directory and install the dependencies using the following commands:
-
-`composer install`
-
-`npm install`
-
-Run the Laravel Mix build using the following command:
-
-`npm run prod`
+`docker-compose exec app composer install`
 
 
-## Step 7: Verify the Deployment
+## Step 6: Verify the Deployment
 -----------------------------
 
-Visit your domain name in a web browser to verify that your Laravel project has been successfully deployed. Please note the Nginx configuration file is located in the `docker-compose/nginx`folder in the Laravel project. The project currently points to the `8000` port but you can update this if need be.
+Visit your localhost in a web browser to verify that your Laravel project has been successfully deployed. Please note the Nginx configuration file is located in the `docker-compose/nginx`folder in the Laravel project. The project currently points to the `8000` port but you can update this if need be.
 
 
-`http://localhost:8080`
+`http://localhost:8000`
 

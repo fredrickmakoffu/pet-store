@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Promotion;
+namespace App\Http\Requests\Brand;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,8 +24,8 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'string|exists:promotions,title',    
-            'content' => 'string'
+            'title' => 'sometimes|string|exists:brands,title',
+            'slug' => 'sometimes|string',
         ];
     }
 }

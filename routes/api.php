@@ -37,6 +37,13 @@ Route::group(['prefix' => 'v1'], function () {
         Route::put('promotions/edit/{promotion:uuid}', [\App\Http\Controllers\PromotionController::class, 'update']);
         Route::delete('promotions/delete/{promotion:uuid}', [\App\Http\Controllers\PromotionController::class, 'destroy']);
 
+        // Brand APIs
+        Route::get('brands', [\App\Http\Controllers\BrandController::class, 'index']);
+        Route::post('brands', [\App\Http\Controllers\BrandController::class, 'store']);
+        Route::get('brands/{brand:uuid}', [\App\Http\Controllers\BrandController::class, 'show']);
+        Route::put('brands/edit/{brand:uuid}', [\App\Http\Controllers\BrandController::class, 'update']);
+        Route::delete('brands/delete/{brand:uuid}', [\App\Http\Controllers\BrandController::class, 'destroy']);
+
 
     });
 

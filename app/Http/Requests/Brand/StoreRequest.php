@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Promotion;
+namespace App\Http\Requests\Brand;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IndexRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,8 @@ class IndexRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'string|exists:promotions,title',    
-            'content' => 'string'
+            'title' => 'required|string|unique:brands,title',
+            'slug' => 'required|string'
         ];
     }
 }

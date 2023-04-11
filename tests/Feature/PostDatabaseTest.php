@@ -9,14 +9,14 @@ use App\Models\Post;
 
 class PostDatabaseTest extends TestCase
 {
-    public function test_can_create_brand() {
+    public function test_can_create_post() {
         $post = Post::factory()->create();
 
         $this->assertInstanceOf(Post::class, $post);
         $this->assertDatabaseHas('posts', ['title' => $post->title]);
     }
 
-    public function test_can_update_brand() {
+    public function test_can_update_post() {
         $post = Post::factory()->create();
 
         $data = [
@@ -29,7 +29,7 @@ class PostDatabaseTest extends TestCase
         $this->assertDatabaseHas('posts', $data);
     }
 
-    public function test_can_delete_brand() {
+    public function test_can_delete_post() {
         $post = Post::factory()->create();
 
         $post->delete();

@@ -10,7 +10,7 @@ use App\Models\Post;
 
 class PostAPITest extends TestCase
 {
-    public function test_api_can_create_brand() {
+    public function test_api_can_create_post() {
         $user = User::factory()->create();
 
         // create access token
@@ -33,9 +33,9 @@ class PostAPITest extends TestCase
         $response->assertStatus(201);
     }
 
-    public function test_api_cannot_create_duplicate_brand() {
+    public function test_api_cannot_create_duplicate_post() {
         $user = User::factory()->create();
-        $brand = Post::factory()->create();
+        $post = Post::factory()->create();
 
         // create access token
         $token = $this->post('api/v1/login', [
@@ -50,7 +50,7 @@ class PostAPITest extends TestCase
 
         // send API
         $response = $this->post('api/v1/posts', [
-            'title' => $brand->title,
+            'title' => $post->title,
             'slug' => fake()->slug(),
         ], $headers);
 
@@ -58,9 +58,9 @@ class PostAPITest extends TestCase
         $response->assertJsonValidationErrors(['title']);
     }
     
-    public function test_api_can_update_brand() {
+    public function test_api_can_update_post() {
         $user = User::factory()->create();
-        $brand = Post::factory()->create();
+        $post = Post::factory()->create();
 
         // create access token
         $token = $this->post('api/v1/login', [
@@ -74,7 +74,7 @@ class PostAPITest extends TestCase
         ];
 
         // send API
-        $response = $this->put('api/v1/posts/edit/' . $brand->uuid, [
+        $response = $this->put('api/v1/posts/edit/' . $post->uuid, [
             'title' => fake()->company(),
             'slug' => fake()->slug(),
         ], $headers);
@@ -82,9 +82,9 @@ class PostAPITest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_api_can_delete_brand() {
+    public function test_api_can_delete_post() {
         $user = User::factory()->create();
-        $brand = Post::factory()->create();
+        $post = Post::factory()->create();
 
         // create access token
         $token = $this->post('api/v1/login', [
@@ -98,7 +98,7 @@ class PostAPITest extends TestCase
         ];
 
         // send API
-        $response = $this->delete('api/v1/posts/delete/' . $brand->uuid, [], $headers);
+        $response = $this->delete('api/v1/posts/delete/' . $post->uuid, [], $headers);
 
         $response->assertStatus(200);
     }

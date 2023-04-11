@@ -63,3 +63,11 @@ Visit your localhost in a web browser to verify that your Laravel project has be
 
 `http://localhost:8000`
 
+## Step 7: Have questions?
+-----------------------------
+
+Feel free to reach out and ask me if you're stuck anywhere. I'd be happy to help.
+
+
+`fredrickmakoffu@gmail.com`
+

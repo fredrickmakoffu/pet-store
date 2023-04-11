@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Promotion;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User;
 
-class UsersSeeder extends Seeder
+class PromotionsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,10 +15,8 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()
-            ->count(50)
+        Promotion::factory()
+            ->count(10)
             ->create();
-
-        
     }
 }

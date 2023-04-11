@@ -58,6 +58,12 @@ Route::group(['prefix' => 'v1'], function () {
         Route::put('category/edit/{category:uuid}', [\App\Http\Controllers\CategoryController::class, 'update']);
         Route::delete('category/delete/{category:uuid}', [\App\Http\Controllers\CategoryController::class, 'destroy']);
 
+        Route::get('products', [\App\Http\Controllers\ProductController::class, 'index']);
+        Route::post('products', [\App\Http\Controllers\ProductController::class, 'store']);
+        Route::get('products/{product:uuid}', [\App\Http\Controllers\ProductController::class, 'show']);
+        Route::put('products/edit/{product:uuid}', [\App\Http\Controllers\ProductController::class, 'update']);
+        Route::delete('products/delete/{product:uuid}', [\App\Http\Controllers\ProductController::class, 'destroy']);
+
 
     });
 

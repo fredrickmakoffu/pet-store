@@ -6,6 +6,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Database\QueryException;
 use Exception;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -57,6 +58,11 @@ class Handler extends ExceptionHandler
                     return response()->json([
                         'message' => $exception->getMessage(),
                     ], $exception->getStatusCode());
+                } elseif ($exception instanceof ValidationException) {
+                    return response()->json([
+                        'message' => 'Validation failed!',
+                        'errors' => $exception->errors()
+                    ], 422);
                 } else {
                     return response()->json([
                         'message' => 'Something went wrong! Please reach out to support.',

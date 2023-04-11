@@ -7,6 +7,7 @@ use App\Http\Requests\Category\StoreRequest;
 use App\Http\Resources\CollectionResource;
 use App\Models\Category;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -39,8 +40,15 @@ class CategoryController extends Controller
     }
 
     public function destroy(Category $category) : CollectionResource
-    {
+    {   
+        DB::beginTransaction();
+
         $category->delete();
+
+        // delete all related products
+        $category->products()->delete();
+
+        DB::commit();
 
         return new CollectionResource($category);
     }

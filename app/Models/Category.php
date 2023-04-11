@@ -16,6 +16,11 @@ class Category extends Model
         'slug',
     ];
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     public function scopeFilter($query, array $filters)
     {
         $title = $filters['title'] ?? null;

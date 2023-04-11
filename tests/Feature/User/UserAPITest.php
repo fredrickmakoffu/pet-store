@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\User;
 
 use Tests\TestCase;
 use App\Models\User;
@@ -114,7 +114,7 @@ class UserAPITest extends TestCase
 
     public function test_can_update_user_via_api() {
         $user = User::factory()->create();
-        echo $user->email;
+        
         // create access token
         $token = $this->post('api/v1/login', [
             'email' => $user->email,

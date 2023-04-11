@@ -25,7 +25,8 @@ class StoreRequest extends FormRequest
     {
         return [
             'title' => 'required|string|unique:promotions,title',
-            'content' => 'required|string'
+            'content' => 'required|string',
+            'metadata' => 'required|array'
         ];
     }
 }

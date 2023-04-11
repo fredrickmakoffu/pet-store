@@ -23,7 +23,7 @@ class PromotionController extends Controller
     public function store(StoreRequest $request) : CollectionResource {
         $promotion = Promotion::create(array_merge($request->validated(), [
             'uuid' => Uuid::uuid4(),
-            'metadata' => json_encode($request->validated())
+            'metadata' => json_encode($request->validated()['metadata'])
         ]));
 
         return new CollectionResource($promotion);

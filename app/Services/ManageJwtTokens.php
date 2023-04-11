@@ -24,7 +24,6 @@ use Ramsey\Uuid\Uuid;
 // models
 use App\Models\User;
 use App\Models\JwtToken;
-use Illuminate\Support\Facades\Log;
 
 class ManageJwtTokens
 {

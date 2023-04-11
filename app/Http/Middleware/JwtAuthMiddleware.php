@@ -6,8 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Services\ManageJwtTokens;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 
 class JwtAuthMiddleware
 {

@@ -23,9 +23,10 @@ class Promotion extends Model
 
     public function scopeFilter($query, array $filters)
     {   
-        $query->when(isset($filters['title']), fn ($query, $title) => 
-                $query->where('title', $title))
-            ->when(isset($filters['content']), fn ($query, $content) => 
-                $query->where('content', $content));
+        $title = $filters['title'] ?? null;
+
+        $query->when($title, function($query) use ($title) {
+            $query->where('title', 'LIKE', "%{$title}%");
+        });
     }
 }

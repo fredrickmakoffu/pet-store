@@ -1,0 +1,1254 @@
+openapi: 3.0.0
+info:
+  title: Pet Store
+  description: |-
+      This is the API documentation for backend APIs for the Pet Store Application
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+    noauthAuth:
+      type: http
+      scheme: noauth
+tags:
+  - name: Auth
+  - name: Admin
+  - name: Promotions
+  - name: Brands
+  - name: Posts
+  - name: Categories
+  - name: Products
+paths:
+  /api/v1/register:
+    post:
+      tags:
+        - Auth
+      summary: Register User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                first_name: Updated Test
+                last_name: User
+                phone_number: '+254711787441'
+                email: test@example.com
+                password: '12345678'
+                password_confirmation: '12345678'
+                is_admin: true
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/login:
+    post:
+      tags:
+        - Auth
+      summary: Login User
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
+              example:
+                email: test@example.com
+                password: '12345678'
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/logout:
+    get:
+      tags:
+        - Auth
+      summary: Logout
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/admin/create:
+    post:
+      tags:
+        - Admin
+      summary: Create User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                first_name: Test 
+                last_name: User
+                phone_number: '+254711700900'
+                email: sharon1@example.com
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/users/edit/{uuid}:
+    put:
+      tags:
+        - Admin
+      summary: Update User Details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                first_name: Updated Test
+                last_name: User
+                phone_number: '+254711700900'
+                email: test@example.com
+                password: '12345678'
+                password_confirmation: '12345678'
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the user being edited'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/admin/user-listing:
+    get:
+      tags:
+        - Admin
+      summary: List Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/admin/users/delete/{uuid}:
+    delete:
+      tags:
+        - Admin
+      summary: Delete User
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the user being edited'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/promotions:
+    post:
+      tags:
+        - Promotions
+      summary: Store Promotions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Promotion 2
+                content: This is a description.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Promotions
+      summary: Get Promotions
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+        - name: title
+          in: query
+          description: "Filter records by Promotion title"
+          schema:
+            type: string
+          example: Promotion I          
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/promotions/{uuid}:
+    get:
+      tags:
+        - Promotions
+      summary: Get Single Promotion
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the promotion being edited'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/promotions/edit/{uuid}:
+    put:
+      tags:
+        - Promotions
+      summary: Update Promotions
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the promotion being edited'
+          required: true
+          schema:
+            type: string      
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Promotion 2 - Update
+                content: This is a description.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/promotions/delete/{uuid}:
+    delete:
+      tags:
+        - Promotions
+      summary: Delete Promotions
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the user being edited'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/brands:
+    post:
+      tags:
+        - Brands
+      summary: Store Brands
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Brand 1
+                slug: This is a description.
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Brands
+      summary: Get Brands
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+          
+        - name: title
+          in: query
+          description: "Filter records by Brand title"
+          schema:
+            type: string
+          example: Brand I  
+          
+        - name: slug
+          in: query
+          description: "Filter records by Brand slug"
+          schema:
+            type: string
+          example: description           
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/brands/{uuid}:
+    get:
+      tags:
+        - Brands
+      summary: Get Brands
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the brand being retrieved'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/brands/edit/{uuid}:
+    put:
+      tags:
+        - Brands
+      summary: Update Brand
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Brand 1
+                slug: This is a description.
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the brand being edited'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/brands/delete/{uuid}:
+    delete:
+      tags:
+        - Brands
+      summary: Delete Brand
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the user being deleted'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/posts:
+    post:
+      tags:
+        - Posts
+      summary: Store Posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Promotion 1
+                slug: This is a description.
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Posts
+      summary: Get Posts
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+            
+        - name: title
+          in: query
+          description: "Filter records by Post title"
+          schema:
+            type: string
+          example: Brand I  
+          
+        - name: slug
+          in: query
+          description: "Filter records by Post slug"
+          schema:
+            type: string
+          example: description   
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/posts/{uuid}:
+    get:
+      tags:
+        - Posts
+      summary: Get Post
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the post being retrieved'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/posts/edit/{uuid}:
+    put:
+      tags:
+        - Posts
+      summary: Update Posts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Brand 1 - Update
+                slug: This is a description.
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the post being edited'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/posts/delete/{uuid}:
+    delete:
+      tags:
+        - Posts
+      summary: Delete Posts
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the post being deleted'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/category:
+    post:
+      tags:
+        - Categories
+      summary: Store Categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Category 1
+                slug: This is a description.
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Categories
+      summary: Get Categories
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+        - name: title
+          in: query
+          description: "Filter records by Category title"
+          schema:
+            type: string
+          example: Brand I  
+          
+        - name: slug
+          in: query
+          description: "Filter records by Category slug"
+          schema:
+            type: string
+          example: description            
+
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/category/{uuid}:
+    get:
+      tags:
+        - Categories
+      summary: Get Category
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the user being edited'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/category/edit/{uuid}:
+    put:
+      tags:
+        - Categories
+      summary: Update Category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Category 1 - Update
+                slug: This is a description.
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the category being edited'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/category/delete/{uuid}:
+    delete:
+      tags:
+        - Categories
+      summary: Delete Category
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the category being deleted'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/products:
+    post:
+      tags:
+        - Products
+      summary: Store Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Product 6, Test
+                description: This is a description.
+                price: '45'
+                category_id: 4
+                metadata:
+                  - brand: Brand 2
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Products
+      summary: Get All Products
+      security:
+        - bearerAuth: []
+        
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+          
+        - name: title
+          in: query
+          description: "Filter records by product title"
+          schema:
+            type: string
+          example: Brand I  
+          
+        - name: max-price
+          in: query
+          description: "Filter records under maximum price"
+          schema:
+            type: number
+          example: description 
+          
+        - name: min_price
+          in: query
+          description: "Filter records over minimum price"
+          schema:
+            type: string
+          example: Brand I  
+          
+        - name: category_id
+          in: query
+          description: "Filter records by category ID"
+          schema:
+            type: number
+          example: description           
+          
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/products/{uuid}:
+    get:
+      tags:
+        - Products
+      summary: Get Product
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+
+        - name: uuid
+          in: path
+          description: 'The UUID of the category being deleted'
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/products/edit/{uuid}:
+    put:
+      tags:
+        - Products
+      summary: Update Product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Product 1 - update
+                description: This is a description.
+                price: 25
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the product being edited'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/products/delete/{uuid}:
+    delete:
+      tags:
+        - Products
+      summary: Delete Posts
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+          
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {token provided when logged in}
+
+          
+        - name: uuid
+          in: path
+          description: 'The UUID of the product being deleted'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

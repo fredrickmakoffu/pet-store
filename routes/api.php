@@ -51,6 +51,13 @@ Route::group(['prefix' => 'v1'], function () {
         Route::put('posts/edit/{post:uuid}', [\App\Http\Controllers\PostsController::class, 'update']);
         Route::delete('posts/delete/{post:uuid}', [\App\Http\Controllers\PostsController::class, 'destroy']);
 
+        // Category APIs
+        Route::get('category', [\App\Http\Controllers\CategoryController::class, 'index']);
+        Route::post('category', [\App\Http\Controllers\CategoryController::class, 'store']);
+        Route::get('category/{category:uuid}', [\App\Http\Controllers\CategoryController::class, 'show']);
+        Route::put('category/edit/{category:uuid}', [\App\Http\Controllers\CategoryController::class, 'update']);
+        Route::delete('category/delete/{category:uuid}', [\App\Http\Controllers\CategoryController::class, 'destroy']);
+
 
     });
 

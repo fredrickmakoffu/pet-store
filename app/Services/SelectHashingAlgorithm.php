@@ -7,7 +7,7 @@ use Lcobucci\JWT\Signer\Hmac\Sha512;
 use Lcobucci\JWT\Signer\Hmac\Sha384;
 use Lcobucci\JWT\Signer\Blake2b;
 
-final class SelectHashingAlgorithm
+class SelectHashingAlgorithm
 {
     public static function getAlgorithm($algo)
     {
@@ -25,4 +25,3 @@ final class SelectHashingAlgorithm
         }
     }
 }
-

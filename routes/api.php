@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\JwtToken;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,8 +61,6 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('products/{product:uuid}', [\App\Http\Controllers\ProductController::class, 'show']);
         Route::put('products/edit/{product:uuid}', [\App\Http\Controllers\ProductController::class, 'update']);
         Route::delete('products/delete/{product:uuid}', [\App\Http\Controllers\ProductController::class, 'destroy']);
-
-
     });
 
     // Admin

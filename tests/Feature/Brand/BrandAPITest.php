@@ -7,12 +7,14 @@ use App\Models\User;
 use App\Models\Brand;
 
 class BrandAPITest extends TestCase
-{
+{   
+    private $login_url =  'api/v1/login';
+
     public function test_api_can_create_brand() {
         $user = User::factory()->create();
 
         // create access token
-        $token = $this->post('api/v1/login', [
+        $token = $this->post($this->login_url, [
             'email' => $user->email,
             'password' => 'password'
         ]);
@@ -36,7 +38,7 @@ class BrandAPITest extends TestCase
         $brand = Brand::factory()->create();
 
         // create access token
-        $token = $this->post('api/v1/login', [
+        $token = $this->post($this->login_url, [
             'email' => $user->email,
             'password' => 'password'
         ]);
@@ -61,7 +63,7 @@ class BrandAPITest extends TestCase
         $brand = Brand::factory()->create();
 
         // create access token
-        $token = $this->post('api/v1/login', [
+        $token = $this->post($this->login_url, [
             'email' => $user->email,
             'password' => 'password'
         ]);
@@ -85,7 +87,7 @@ class BrandAPITest extends TestCase
         $brand = Brand::factory()->create();
 
         // create access token
-        $token = $this->post('api/v1/login', [
+        $token = $this->post($this->login_url, [
             'email' => $user->email,
             'password' => 'password'
         ]);

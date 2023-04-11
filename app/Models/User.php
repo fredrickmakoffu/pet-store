@@ -30,7 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_marketing',
         'is_admin',
         'last_login_at',
-        'password'
+        'password',
     ];
 
     /**
@@ -52,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'last_login_at' => 'datetime',
         'is_marketing' => 'boolean',
-        'is_admin' => 'boolean'
+        'is_admin' => 'boolean',
     ];
 
     public function scopeFilter($query, $filters) 

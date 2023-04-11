@@ -4,7 +4,6 @@ namespace App\Services;
 
 use DateTimeImmutable;
 use DateTimeZone;
-
 use Lcobucci\JWT\Signer;
 use Lcobucci\JWT\Token\Builder;
 use Lcobucci\JWT\Signer\Key\InMemory;
@@ -17,11 +16,7 @@ use Lcobucci\JWT\Validation\Validator;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Lcobucci\JWT\Validation\Constraint\HasClaimWithValue;
-
-// uuid
 use Ramsey\Uuid\Uuid;
-
-// models
 use App\Models\User;
 use App\Models\JwtToken;
 
@@ -83,7 +78,7 @@ class ManageJwtTokens
             new IdentifiedBy($uuid),
             new SignedWith($this->algorithm, $signingKey),
             new HasClaimWithValue('uid', $user->id),
-            new HasClaimWithValue('is_admin', $user->is_admin)
+            new HasClaimWithValue('is_admin', $user->is_admin),
         ];
         
         try {
@@ -135,4 +130,3 @@ class ManageJwtTokens
         return $expiry_time < $now;
     }
 } 
-

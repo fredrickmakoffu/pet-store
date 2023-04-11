@@ -62,7 +62,7 @@ Run the Laravel Mix build using the following command:
 ## Step 7: Verify the Deployment
 -----------------------------
 
-Visit your domain name in a web browser to verify that your Laravel project has been successfully deployed. Please note the Nginx configuration file is located in the `docker-compose/nginx`folder in the Laravel project. The project currently points to the `8080` port but you can update this if need be.
+Visit your domain name in a web browser to verify that your Laravel project has been successfully deployed. Please note the Nginx configuration file is located in the `docker-compose/nginx`folder in the Laravel project. The project currently points to the `8000` port but you can update this if need be.
 
 
 `http://localhost:8080`

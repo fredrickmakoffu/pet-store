@@ -32,14 +32,13 @@ class AdminController extends Controller
         return new CollectionResource($users);
     }
 
-    public function update(StoreRequest $request, $uuid) : CollectionResource {
-        $user = User::where('uuid', $uuid)->update($request->validated());
+    public function update(StoreRequest $request, User $user) : CollectionResource {
+        $user->update($request->validated());
 
         return new CollectionResource($user);
     }
 
-    public function destroy(string $uuid) : CollectionResource {
-        $user = User::where('uuid', $uuid)->first();
+    public function destroy(User $user) : CollectionResource {
         $user->delete();
 
         return new CollectionResource([]);

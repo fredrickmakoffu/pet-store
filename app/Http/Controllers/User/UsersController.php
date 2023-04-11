@@ -17,21 +17,17 @@ class UsersController extends Controller
         return new CollectionResource($users);
     }
 
-    public function show(string $uuid) : CollectionResource {
-        $user = User::where('uuid', $uuid)->first();
-
+    public function show(User $user) : CollectionResource { 
         return new CollectionResource($user);
     }
 
-    public function update(UpdateRequest $request, string $uuid) : CollectionResource {
-        $user = User::where('uuid', $uuid)->first();
+    public function update(UpdateRequest $request, User $user) : CollectionResource {
         $user->update($request->validated());
 
         return new CollectionResource($user);
     }
 
-    public function destroy(string $uuid) : CollectionResource {
-        $user = User::where('uuid', $uuid)->first();
+    public function destroy(User $user) : CollectionResource {
         $user->delete();
 
         return new CollectionResource([]);

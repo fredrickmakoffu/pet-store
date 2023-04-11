@@ -19,17 +19,26 @@ Route::group(['prefix' => 'v1'], function () {
     // Auth Routes
     Route::post('login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
     Route::post('register', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
-
+    
     // Validate User
     Route::get('/email/verify/{id}/{hash}', [\App\Http\Controllers\User\UsersController::class, 'verify'])->name('verification.verify');
     
-    Route::group(['middleware' => 'jwt:admin', 'prefix' => 'admin'], function () {
-        // Admin
-        Route::post('create', [\App\Http\Controllers\User\UsersController::class, 'store']);
-        Route::get('user-listing', [\App\Http\Controllers\User\UsersController::class, 'index']);
-        Route::put('user-edit/{id}', [\App\Http\Controllers\User\UsersController::class, 'update']);
-        Route::get('user-delete/{id}', [\App\Http\Controllers\User\UsersController::class, 'destroy']);
+    // User APIs
+    Route::group(['middleware' => 'jwt'], function () {
+        Route::get('users/{id}', [\App\Http\Controllers\User\UsersController::class, 'show']);
+        Route::get('users/edit/{id}', [\App\Http\Controllers\User\UsersController::class, 'update']);
+        Route::get('users/delete/{id}', [\App\Http\Controllers\User\UsersController::class, 'destroy']);
     });
+
+    // Admin
+    Route::group(['middleware' => 'jwt:admin', 'prefix' => 'admin'], function () {
+        Route::post('create', [\App\Http\Controllers\User\AdminController::class, 'store']);
+        Route::get('user-listing', [\App\Http\Controllers\User\AdminController::class, 'index']);
+        Route::put('user-edit/{uuid}', [\App\Http\Controllers\User\AdminController::class, 'update']);
+        Route::get('user-delete/{uuid}', [\App\Http\Controllers\User\AdminController::class, 'destroy']);
+    });
+
+    
 
     Route::group(['middleware' => 'jwt'], function () {
         // Admin

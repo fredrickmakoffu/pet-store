@@ -24,34 +24,7 @@ class AdminController extends Controller
         event(new Registered($user));
 
         return new CollectionResource($user);
-    }
-
-    protected function verify(int $id, string $hash) : CollectionResource {
-        $user = User::findOrFail($id);
-
-        // if user does not exist
-        if( !$user) {
-            abort(404, 'User not found.');
-        }
-
-        // if user is already verified
-        if($user->email_verified_at) {
-            abort(403, 'User already verified.');
-        }
-
-        // validate hash
-        $expectedHash =  sha1($user->email);
-
-        if( !hash_equals($hash, $expectedHash)) {
-            abort(403, 'Invalid hash.');
-        }
-        
-        $user->update([
-            'email_verified_at' => now()
-        ]);
-
-        return new CollectionResource($user);
-    }
+    }    
     
     public function index(IndexRequest $request)  {        
         $users = User::filter($request->validated())->get();
@@ -59,13 +32,14 @@ class AdminController extends Controller
         return new CollectionResource($users);
     }
 
-    public function update(StoreRequest $request, User $user) : CollectionResource {
-        $user->update($request->validated());
+    public function update(StoreRequest $request, $uuid) : CollectionResource {
+        $user = User::where('uuid', $uuid)->update($request->validated());
 
         return new CollectionResource($user);
     }
 
-    public function destroy(User $user) : CollectionResource {
+    public function destroy(string $uuid) : CollectionResource {
+        $user = User::where('uuid', $uuid)->first();
         $user->delete();
 
         return new CollectionResource([]);

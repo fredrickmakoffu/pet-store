@@ -57,7 +57,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function scopeFilter($query, $filters) 
     {
-        $is_admin = isset($filters['show_admin']) || $filters['show_admin'] == "true" 
+        $is_admin = isset($filters['show_admin']) && $filters['show_admin'] == "true" 
             ? [0, 1] 
             : [0];
 

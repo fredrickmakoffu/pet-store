@@ -23,11 +23,21 @@ Route::group(['prefix' => 'v1'], function () {
     // Validate User
     Route::get('/email/verify/{id}/{hash}', [\App\Http\Controllers\User\UsersController::class, 'verify'])->name('verification.verify');
     
-    // User APIs
+    
     Route::group(['middleware' => 'jwt'], function () {
+        // User APIs
         Route::get('users/{user:uuid}', [\App\Http\Controllers\User\UsersController::class, 'show']);
         Route::get('users/edit/{user:uuid}', [\App\Http\Controllers\User\UsersController::class, 'update']);
         Route::get('users/delete/{user:uuid}', [\App\Http\Controllers\User\UsersController::class, 'destroy']);
+
+        // Promotion APIs
+        Route::get('promotions', [\App\Http\Controllers\PromotionController::class, 'index']);
+        Route::post('promotions', [\App\Http\Controllers\PromotionController::class, 'store']);
+        Route::get('promotions/{promotion:uuid}', [\App\Http\Controllers\PromotionController::class, 'show']);
+        Route::put('promotions/edit/{promotion:uuid}', [\App\Http\Controllers\PromotionController::class, 'update']);
+        Route::delete('promotions/delete/{promotion:uuid}', [\App\Http\Controllers\PromotionController::class, 'destroy']);
+
+
     });
 
     // Admin
@@ -38,27 +48,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('user-delete/{user:uuid}', [\App\Http\Controllers\User\AdminController::class, 'destroy']);
     });
 
-    
-
     Route::group(['middleware' => 'jwt'], function () {
         // Admin
         Route::get('logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout']);
     });
-});
-
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-
-Route::get('email/{id}', function(User $user) {
-    try {
-        event(new Registered($user));
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => false,
-            'message' => $e->getMessage()
-        ], 500);
-    }
-
-    return 'here';
 });
 

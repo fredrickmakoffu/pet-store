@@ -57,6 +57,11 @@ class Handler extends ExceptionHandler
                     return response()->json([
                         'message' => $exception->getMessage(),
                     ], $exception->getStatusCode());
+                } else {
+                    return response()->json([
+                        'message' => 'Something went wrong! Please reach out to support.',
+                        'error' => $exception->getMessage()
+                    ], 500);
                 }
             }
         });

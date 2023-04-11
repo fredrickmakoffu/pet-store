@@ -48,7 +48,14 @@ So that all third party libraries can work in your environment, you can can inst
 `docker-compose exec app composer install`
 
 
-## Step 6: Verify the Deployment
+## Step 6: Generate your application key 
+-----------------------------
+
+Generate your Application key with this command:
+
+`docker-compose exec app php artisan key:generate`
+
+## Step 7: Verify the Deployment
 -----------------------------
 
 Visit your localhost in a web browser to verify that your Laravel project has been successfully deployed. Please note the Nginx configuration file is located in the `docker-compose/nginx`folder in the Laravel project. The project currently points to the `8000` port but you can update this if need be.

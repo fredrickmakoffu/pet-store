@@ -21,7 +21,7 @@ class AdminController extends Controller
         ]));
 
         // send verification email
-        event(new Registered($user));
+        // event(new Registered($user));
 
         return new CollectionResource($user);
     }    

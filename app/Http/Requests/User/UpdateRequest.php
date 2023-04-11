@@ -26,8 +26,8 @@ class UpdateRequest extends FormRequest
         return [
             'first_name' => 'required|string|min:3|max:30',
             'last_name' => 'required|string|min:3|max:30',
-            'phone_number' => 'required|string|max:30|unique:users',
-            'email' => 'required|email|unique:users',
+            'phone_number' => 'required|string|max:30',
+            'email' => 'required|email',
             'is_marketing' => 'sometimes|boolean',
             'is_admin' => 'sometimes|boolean',
         ];

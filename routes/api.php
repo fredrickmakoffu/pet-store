@@ -27,7 +27,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['middleware' => 'jwt'], function () {
         // User APIs
         Route::get('users/{user:uuid}', [\App\Http\Controllers\User\UsersController::class, 'show']);
-        Route::get('users/edit/{user:uuid}', [\App\Http\Controllers\User\UsersController::class, 'update']);
+        Route::put('users/edit/{user:uuid}', [\App\Http\Controllers\User\UsersController::class, 'update']);
         Route::get('users/delete/{user:uuid}', [\App\Http\Controllers\User\UsersController::class, 'destroy']);
 
         // Promotion APIs
@@ -80,4 +80,3 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout']);
     });
 });
-

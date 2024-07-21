@@ -14,14 +14,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'v1'], function () {
-    // Auth Routes
-    Route::post('login', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
-    Route::post('register', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
-    
+    // Auth APIs
+    Route::prefix('auth')->group(function () {
+        require base_path('routes/auth/login.php');
+        require base_path('routes/auth/register.php');
+    });
+
     // Validate User
     Route::get('/email/verify/{id}/{hash}', [\App\Http\Controllers\User\UsersController::class, 'verify'])->name('verification.verify');
-    
-    
+
+
     Route::group(['middleware' => 'jwt'], function () {
         // User APIs
         Route::get('users/{user:uuid}', [\App\Http\Controllers\User\UsersController::class, 'show']);
@@ -29,11 +31,10 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('users/delete/{user:uuid}', [\App\Http\Controllers\User\UsersController::class, 'destroy']);
 
         // Promotion APIs
-        Route::get('promotions', [\App\Http\Controllers\PromotionController::class, 'index']);
-        Route::post('promotions', [\App\Http\Controllers\PromotionController::class, 'store']);
-        Route::get('promotions/{promotion:uuid}', [\App\Http\Controllers\PromotionController::class, 'show']);
-        Route::put('promotions/edit/{promotion:uuid}', [\App\Http\Controllers\PromotionController::class, 'update']);
-        Route::delete('promotions/delete/{promotion:uuid}', [\App\Http\Controllers\PromotionController::class, 'destroy']);
+        Route::resource('promotions', \App\Http\Controllers\PromotionController::class)
+            ->parameters([
+                'promotions' => 'promotion:uuid'
+            ]);
 
         // Brand APIs
         Route::get('brands', [\App\Http\Controllers\BrandController::class, 'index']);
@@ -56,6 +57,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::put('category/edit/{category:uuid}', [\App\Http\Controllers\CategoryController::class, 'update']);
         Route::delete('category/delete/{category:uuid}', [\App\Http\Controllers\CategoryController::class, 'destroy']);
 
+        // products
         Route::get('products', [\App\Http\Controllers\ProductController::class, 'index']);
         Route::post('products', [\App\Http\Controllers\ProductController::class, 'store']);
         Route::get('products/{product:uuid}', [\App\Http\Controllers\ProductController::class, 'show']);

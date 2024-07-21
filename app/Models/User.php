@@ -31,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_admin',
         'last_login_at',
         'password',
+        'address'
     ];
 
     /**
@@ -55,10 +56,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_admin' => 'boolean',
     ];
 
-    public function scopeFilter($query, $filters) 
+    public function scopeFilter($query, $filters)
     {
-        $is_admin = isset($filters['show_admin']) && $filters['show_admin'] == "true" 
-            ? [0, 1] 
+        $is_admin = isset($filters['show_admin']) && $filters['show_admin'] == "true"
+            ? [0, 1]
             : [0];
 
         return $query->whereIn('is_admin', $is_admin)

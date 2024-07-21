@@ -2,25 +2,52 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Resources\ErrorResource;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\CollectionResource;
 use Illuminate\Auth\Events\Registered;
-use App\Models\User;
 use Ramsey\Uuid\Uuid;
+use App\Actions\User\CreateUser;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
-    public function register(RegisterRequest $request) : CollectionResource {
-        $user = User::create(array_merge($request->validated(), [
-            'uuid' => Uuid::uuid4(),
-            'password' => Hash::make($request->validated()['password'])
-        ]));
+    public function __construct(private readonly CreateUser $createUser) {}
+    /**
+     * Register a new user.
+     *
+     * @param RegisterRequest $request
+     * @return CollectionResource
+     */
 
-        // send verification email
-        event(new Registered($user));
+    public function store(RegisterRequest $request): CollectionResource|ErrorResource
+    {
+        try {
+            DB::beginTransaction();
 
-        return new CollectionResource($user);
+            $data = array_merge($request->validated(), [
+                'uuid' => Uuid::uuid4(),
+                'password' => Hash::make($request->validated()['password'])
+            ]);
+
+            // create user
+            $user = (new CreateUser)($data);
+
+            // send verification email
+            // event(new Registered($user));
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            // return error response
+            return new ErrorResource($e);
+        }
+
+        DB::commit();
+
+        // return response
+        return new CollectionResource(collect($user)->toArray());
     }
 }

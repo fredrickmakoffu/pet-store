@@ -13,7 +13,7 @@ use App\Http\Resources\CollectionResource;
 
 class LoginController extends Controller
 {
-    public function login(LoginRequest $request) : CollectionResource {
+    public function store(LoginRequest $request) : CollectionResource {
         $data = $request->validated();
 
         // check if user exists
@@ -36,7 +36,7 @@ class LoginController extends Controller
     public function logout(Request $request) : CollectionResource {
         // delete token from database
         JwtToken::where('token', $request->bearerToken())->delete();
-        
+
         return new CollectionResource([]);
     }
 

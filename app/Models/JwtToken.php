@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Ramsey\Uuid\Uuid;
 use DateTimeImmutable;
 use Carbon\Carbon;
+use Illuminate\Contracts\Auth\UserProvider;
+use Lcobucci\JWT\UnencryptedToken;
 
 class JwtToken extends Model
 {
@@ -20,7 +21,7 @@ class JwtToken extends Model
         'expiration_date'
     ];
 
-    public function saveToken(User $user, object $token, string $uuid, DateTimeImmutable $expiration_date) : JwtToken {
+    public function saveToken(User $user, UnencryptedToken $token, string $uuid, DateTimeImmutable $expiration_date) : JwtToken {
         return $this->create([
             'user_id' => $user->id,
             'token' => $token->toString(),
@@ -29,7 +30,7 @@ class JwtToken extends Model
         ]);
     }
 
-    public function getDetailsFromToken(string $token) : JwtToken | null {
+    public function tokenDetails(string $token) : JwtToken | null {
         $token = $this->where('token', $token)->first();
         return $token ?? null;
     }

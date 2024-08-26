@@ -6,31 +6,25 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\JwtToken;
 use Illuminate\Http\Request;
-use App\Services\ManageJwtTokens;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\CollectionResource;
 
 class LoginController extends Controller
 {
     public function store(LoginRequest $request) : CollectionResource {
-        $data = $request->validated();
+      $data = $request->validated();
 
-        // check if user exists
-        $user = User::where('email', $data['email'])->first();
+     	// login user
+			Auth::guard('jwt')->attempt($data);
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            abort(401, 'Invalid credentials');
-        }
+			$token = Auth::guard('jwt')->getToken();
 
-        // create token
-        $token = (new ManageJwtTokens())->createToken($user);
-
-        return new CollectionResource([
-            'message' => 'Logged in successfully',
-            'token' => $token->toString(),
-            'expiration_date' => $token->claims()->all()['exp']
-        ]);
+      return new CollectionResource([
+          'message' => 'Logged in successfully',
+          'token' => $token->toString(),
+          'expiration_date' => $token->claims()->all()['exp']
+      ]);
     }
 
     public function logout(Request $request) : CollectionResource {

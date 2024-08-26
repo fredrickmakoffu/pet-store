@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\JwtToken;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -44,6 +45,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+
+    protected $appends = [
+				'jwt_token',
+		];
+
     /**
      * The attributes that should be cast.
      *
@@ -56,6 +62,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_admin' => 'boolean',
     ];
 
+    protected function getJwtTokenAttribute()
+		{
+			return $this->jwtToken()->first()->token ?? null;
+		}
+
     public function scopeFilter($query, $filters)
     {
         $is_admin = isset($filters['show_admin']) && $filters['show_admin'] == "true"
@@ -65,4 +76,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $query->whereIn('is_admin', $is_admin)
             ->select('id', 'first_name', 'last_name', 'uuid', 'email', 'phone_number', 'is_admin', 'is_marketing', 'created_at');
     }
+
+    public function jwtToken()
+		{
+				return $this->hasOne(JwtToken::class, 'user_id')
+					->where('expiration_date', '>', now())
+					->latest();
+		}
 }

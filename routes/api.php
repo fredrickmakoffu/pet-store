@@ -1,5 +1,7 @@
 <?php
 
+use App\Contracts\Auth\AuthTokenInterface;
+use App\Services\ManageJwtTokens;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -77,4 +79,20 @@ Route::group(['prefix' => 'v1'], function () {
         // Admin
         Route::get('logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout']);
     });
+});
+
+use Illuminate\Support\Facades\Auth;
+Route::get('test', function () {
+	// login user
+	Auth::guard('api')->attempt([
+		'email' => 'stroman.sabina@example.org',
+		'password' => 'password'
+	]);
+
+	return [Auth::guard('api')->user()];
+});
+
+use Illuminate\Http\Request;
+Route::middleware('auth:jwt')->get('/test-user', function (Request $request) {
+	return $request->user();
 });

@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+use App\Services\ManageJwtTokens;
+use App\Contracts\Auth\AuthTokenInterface;
+use App\Guards\JwtGuard;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -23,8 +27,19 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
+      $this->registerPolicies();
 
-        //
+      // bind the interface to the implementation
+			$this->app->bind(AuthTokenInterface::class, function (Application $app) {
+				return new ManageJwtTokens($app->make('auth')->createUserProvider('users'));
+			});
+
+			// extend the auth guard
+			Auth::extend('jwt', function (Application $app, string $name, array $config) {
+				return new JwtGuard(
+					Auth::createUserProvider($config['provider']),
+					$app->make(AuthTokenInterface::class)
+				);
+			});
     }
 }
